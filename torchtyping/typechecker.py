@@ -63,7 +63,8 @@ def _check_tensor(
     argname: str, value: Any, origin: Type[torch.Tensor], metadata: Dict[str, Any]
 ):
     details = metadata["details"]
-    if not isinstance(value, origin) or any(
+    # del not isinstance(value, origin) or
+    if any(
         not detail.check(value) for detail in details
     ):
         expected_string = _to_string(
@@ -302,7 +303,7 @@ def patch_typeguard():
             if is_torchtyping_annotation:
                 base_cls, *all_metadata = get_args(expected_type)
                 if not issubclass(base_cls, torch.Tensor):
-                    is_torchtyping_annotation = False
+                    is_torchtyping_annotation = True # Check even if it is not strictly a tensor type
             # Now check if the annotation's metadata is our metadata
             if is_torchtyping_annotation:
                 for metadata in all_metadata:
